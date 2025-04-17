@@ -142,6 +142,7 @@ float calculate_mOhms(float reading, uint8_t range)
 {
   float out=0;
   switch (range)
+  {
     case 2: //1A range
       out = reading;
       break;
@@ -151,9 +152,10 @@ float calculate_mOhms(float reading, uint8_t range)
     case 4: //10mA range
       out = reading/100;
       break;
-    case 3: //1mA range
+    case 5: //1mA range
       out = reading/1000;
       break;
+  }
 }
 
 /**
@@ -177,30 +179,32 @@ void pins_init()
 void  range_select(uint8_t range)
 {
   switch (range)
-  case 2: //1A range
-    digitalWrite(RANGE_1A, HIGH);
-    digitalWrite(RANGE_100mA, LOW);
-    digitalWrite(RANGE_10mA, LOW);
-    digitalWrite(RANGE_1mA, LOW);
+  {
+    case 2: //1A range
+      digitalWrite(RANGE_1A, HIGH);
+      digitalWrite(RANGE_100mA, LOW);
+      digitalWrite(RANGE_10mA, LOW);
+      digitalWrite(RANGE_1mA, LOW);
     break;
-  case 3: //100mA range
-    digitalWrite(RANGE_1A, LOW);
-    digitalWrite(RANGE_100mA, HIGH);
-    digitalWrite(RANGE_10mA, LOW);
-    digitalWrite(RANGE_1mA, LOW);
+    case 3: //100mA range
+      digitalWrite(RANGE_1A, LOW);
+      digitalWrite(RANGE_100mA, HIGH);
+      digitalWrite(RANGE_10mA, LOW);
+      digitalWrite(RANGE_1mA, LOW);
+      break;
+    case 4: //10mA range
+      digitalWrite(RANGE_1A, LOW);
+      digitalWrite(RANGE_100mA, LOW);
+      digitalWrite(RANGE_10mA, HIGH);
+      digitalWrite(RANGE_1mA, LOW);
     break;
-  case 4: //10mA range
-    digitalWrite(RANGE_1A, LOW);
-    digitalWrite(RANGE_100mA, LOW);
-    digitalWrite(RANGE_10mA, HIGH);
-    digitalWrite(RANGE_1mA, LOW);
+    case 5: //1mA range
+      digitalWrite(RANGE_1A, LOW);
+      digitalWrite(RANGE_100mA, LOW);
+      digitalWrite(RANGE_10mA, LOW);
+      digitalWrite(RANGE_1mA, HIGH);
     break;
-  case 3: //1mA range
-   digitalWrite(RANGE_1A, LOW);
-    digitalWrite(RANGE_100mA, LOW);
-    digitalWrite(RANGE_10mA, LOW);
-    digitalWrite(RANGE_1mA, HIGH);
-    break;
+  }
 }
 
 void setup()
