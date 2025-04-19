@@ -1,7 +1,9 @@
 #include <Arduino.h>
-#include "Screen_ui.cpp"
-#include "measurment.cpp"
+#include <screen_ui.h>
+#include "measurement.hpp"
 
+screenUI ui;
+Measure measure;
 
 bool arrow_place=0;
 
@@ -28,14 +30,14 @@ uint8_t button(int pin)
 void setup()
 {
   Serial.begin(115200);
-  Wire.begin();
-	inti_UI();
+  //Wire.begin();
+	/*inti_UI();
   inti_measurment();
-  LcdUpdate(Line0,Line1);
+  LcdUpdate(Line0,Line1);*/
 }
 
 
 void loop()
 {
-  update_UI(arrow_place);  
+  //update_UI(arrow_place);  
 }
