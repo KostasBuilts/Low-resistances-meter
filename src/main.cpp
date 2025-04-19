@@ -3,37 +3,41 @@
 #include<Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-#define ADC_ADDRESS   0x48
-#define LCD_ADDRESS    0x27
-#define LCD_WIDTH        16
-#define LCD_HEIGHT       2   
+#define ADC_ADDRESS              0x48
+#define LCD_ADDRESS              0x27
+#define LCD_WIDTH                16
+#define LCD_HEIGHT               2   
 #define UP                       6
-#define DOWN                7
-#define SELECT                8
-#define RANGE_1A          2
-#define RANGE_100mA   3
-#define RANGE_10mA     4
-#define RANGE_1mA       5
-#define STP_RNG_OPT    AUTO
-#define STP_RNG_OPT2  1mA
-#define STP_RNG_OPT3  10mA
-#define STP_RNG_OPT4  100mA
-#define STP_RNG_OPT5  1A
-#define STP_AVG_OPT     1
-#define STP_AVG_OPT2   4
-#define STP_AVG_OPT3   8
-#define STP_AVG_OPT4   16
-#define STP_AVG_OPT5    32
+#define DOWN                     7
+#define SELECT                   8
+#define RANGE_1A                 2
+#define RANGE_100mA              3
+#define RANGE_10mA               4
+#define RANGE_1mA                5
+#define STP_RNG_OPT              AUTO
+#define STP_RNG_OPT2             1mA
+#define STP_RNG_OPT3             10mA
+#define STP_RNG_OPT4             100mA
+#define STP_RNG_OPT5             1A
+#define STP_AVG_OPT              1
+#define STP_AVG_OPT2             4
+#define STP_AVG_OPT3             8
+#define STP_AVG_OPT4             16
+#define STP_AVG_OPT5             32
 
 ADS1115_WE adc = ADS1115_WE(ADC_ADDRESS);
 LiquidCrystal_I2C screen(LCD_ADDRESS, LCD_WIDTH, LCD_HEIGHT);
+
+/*bool start_menu = true;
+bool setup_menu = false;
+bool Measurement_menu = false;*/
 
 // these two buffers are used for refreshing the LCD
 char Line0[LCD_WIDTH]; 
 char Line1[LCD_WIDTH];
 
 // these 2 dimensional arrays are for the predefined menu
-char start_menu[2][LCD_WIDTH ]={" SETUP",
+char start_menu[2][LCD_WIDTH]={" SETUP",
                                                       " MEASURE"};
 char setup_menu[2][LCD_WIDTH]={" Range: ",
                                                          " Average: "};
@@ -84,6 +88,15 @@ void clearLcdLine(char line[], uint8_t len)
     screen.setCursor(0,1);
     screen.print(str1);
 } 
+
+/*bool update_UI()
+{
+  strncpy(&Line0[1],&start_menu[0][0],15);
+  strncpy(&Line1[1],&start_menu[1][0],15);
+  LcdUpdate(Line0,Line1);
+  arrow(0,arrow_place,true,0);
+  return true;
+}*/
 
 /**
  * @brief Debounces an input and returns only when pressed
@@ -140,7 +153,7 @@ float avg(uint8_t avg_count)
  */
 float calculate_mOhms(float reading, uint8_t range)
 {
-  float out=0;
+  float out = 0;
   switch (range)
   {
     case 2: //1A range
@@ -211,7 +224,17 @@ void setup()
 {
   Serial.begin(115200);
   Wire.begin();
-  screen.init();
+
+  try
+	{
+		if(screen.init() != true) throw false;
+	}
+	catch(bool error)
+	{
+		if(error == false) Serial.println("Error initializing screen");
+		else Serial.println("Screen successfully initialized");
+	}
+  screen.backlight();
   screen.createChar(0, symbol);
   screen.createChar(1, isymbol);
 
@@ -221,20 +244,23 @@ void setup()
   clearLcdLine(Line1,LCD_WIDTH);
 
   LcdUpdate(Line0,Line1);
-  strncpy(&Line0[1],&start_menu[0][0],15);
-  strncpy(&Line1[1],&start_menu[1][0],15);
 }
 
 void loop()
 {
-  bool start = true;
-  bool setup_mode = false;
-  screen.backlight();
-  if(start)
-  {
-    strncpy(&Line0[1],&start_menu[0][0],15);
-    strncpy(&Line1[1],&start_menu[1][0],15);
-    arrow(0,arrow_place,true,0);
+  try {
+    //if(update_UI() == false) throw 1; // Throw an exception when a the UI didn't update successfully
   }
-  LcdUpdate(Line0,Line1);
+  catch (int error_code) {
+    if(error_code == 1) 
+      Serial.println("Error update the UI");
+  }
+  try {
+    
+    throw 2; // Throw an exception when a problem arise
+  }
+  catch (int error_code) {
+    if(error_code == 2)
+      Serial.println("Error reading from the ADC");
+  }
 }
