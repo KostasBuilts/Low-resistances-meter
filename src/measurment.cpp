@@ -1,4 +1,5 @@
-#include<ADS1115_WE.h> 
+#include <Arduino.h>
+#include <ADS1115_WE.h> 
 
 
 #define ADC_ADDRESS              0x48   
@@ -71,6 +72,7 @@ float readChannel(ADS1115_MUX channel) {
         out = reading/1000;
         break;
     }
+    return out;
   }
   
 
@@ -111,7 +113,25 @@ void  range_select(uint8_t range)
   }
 }
 
+/**
+ * @brief Initializes all the inputs and outputs. No Arguments
+ */
+void pins_init()
+{
+  pinMode(UP, INPUT);
+  pinMode(DOWN, INPUT);
+  pinMode(SELECT, INPUT);
+  pinMode(RANGE_1A, OUTPUT);
+  pinMode(RANGE_100mA, OUTPUT);
+  pinMode(RANGE_10mA, OUTPUT);
+  pinMode(RANGE_1mA, OUTPUT);
+}
+
 void inti_measurment()
 {
+    pins_init();
+    if(!adc.init()){
+        Serial.println("Can't connect to the ADC");
+      }
     adc.setVoltageRange_mV(ADS1115_RANGE_6144);
 }

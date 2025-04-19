@@ -83,7 +83,9 @@ bool update_UI(bool arrow_place)
 
 void  inti_UI()
 {
-  screen.init();
+    if(!screen.init()){
+        Serial.println("Can't connect to the ADC");
+    }
   screen.backlight();
   screen.createChar(0, symbol);
   screen.createChar(1, isymbol);
