@@ -1,12 +1,25 @@
 #include <Arduino.h>
-#include <screen_ui.h>
+#include <screen_ui.hpp>
 #include "measurement.hpp"
 
 screenUI ui;
 Measure measure;
 
 bool arrow_place=0;
+bool measuring;
 
+/*void auto_range()
+{
+  if(measuring != true)
+  {
+    for(int i=5; i>=0; i--)
+    {
+      measure.range_select(i);
+      if(measure.avg(2) )
+    }
+
+  }
+}*/
 
 /**
  * @brief Debounces an input and returns only when pressed
@@ -31,9 +44,9 @@ void setup()
 {
   Serial.begin(115200);
   //Wire.begin();
-	/*inti_UI();
-  inti_measurment();
-  LcdUpdate(Line0,Line1);*/
+	ui.initUI();
+  measure.init_measurement();
+  ui.updateUI();
 }
 
 

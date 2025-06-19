@@ -1,5 +1,5 @@
-#ifndef SCREEN_UI_H
-#define SCREEN_UI_H
+#ifndef SCREEN_UI_HPP
+#define SCREEN_UI_HPP
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -32,6 +32,7 @@ public:
     void clearLcdLine(char line[], uint8_t len);
     void lcdUpdate(char str0[], char str1[]);
     bool updateUI(bool arrow_place);
+    bool updateUI();
     void initUI();
 
     // Public buffers for LCD lines

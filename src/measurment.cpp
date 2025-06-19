@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "measurement.hpp"
 
 // Constructor
@@ -63,10 +62,33 @@ float Measure::calculate_mOhms(float reading, uint8_t range) {
 //  * @param uint8_t range
 // */
 void Measure::range_select(uint8_t range) {
-    digitalWrite(RANGE_1A, range == 2 ? HIGH : LOW);
-    digitalWrite(RANGE_100mA, range == 3 ? HIGH : LOW);
-    digitalWrite(RANGE_10mA, range == 4 ? HIGH : LOW);
-    digitalWrite(RANGE_1mA, range == 5 ? HIGH : LOW);
+    switch (range)
+  {
+    case 2: //1A range
+      digitalWrite(RANGE_1A, HIGH);
+      digitalWrite(RANGE_100mA, LOW);
+      digitalWrite(RANGE_10mA, LOW);
+      digitalWrite(RANGE_1mA, LOW);
+    break;
+    case 3: //100mA range
+      digitalWrite(RANGE_1A, LOW);
+      digitalWrite(RANGE_100mA, HIGH);
+      digitalWrite(RANGE_10mA, LOW);
+      digitalWrite(RANGE_1mA, LOW);
+      break;
+    case 4: //10mA range
+      digitalWrite(RANGE_1A, LOW);
+      digitalWrite(RANGE_100mA, LOW);
+      digitalWrite(RANGE_10mA, HIGH);
+      digitalWrite(RANGE_1mA, LOW);
+    break;
+    case 5: //1mA range
+      digitalWrite(RANGE_1A, LOW);
+      digitalWrite(RANGE_100mA, LOW);
+      digitalWrite(RANGE_10mA, LOW);
+      digitalWrite(RANGE_1mA, HIGH);
+    break;
+  }
 }
 
 // /**
