@@ -1,3 +1,6 @@
+#ifndef MEASUREMENT_HPP
+#define MEASUREMENT_HPP
+
 #include <Arduino.h>
 #include <ADS1115_WE.h>
 
@@ -18,9 +21,15 @@ public:
     float readChannel(ADS1115_MUX channel);
     float avg(uint8_t avg_count);
     float calculate_mOhms(float reading, uint8_t range);
+    float get_resistance();
     void range_select(uint8_t range);
     void pins_init();
     void init_measurement();
+    uint8_t avg_count;
+    uint8_t current_range = 5;
 
+private:
     ADS1115_WE adc;
+
 };
+#endif

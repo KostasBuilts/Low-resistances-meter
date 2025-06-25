@@ -57,43 +57,56 @@ float Measure::calculate_mOhms(float reading, uint8_t range) {
     return out;
 }
 
-// /**
-//  * @brief Selects a current range
-//  * @param uint8_t range
-// */
+/**
+ * @brief Selects a current range
+ * @param uint8_t range
+*/
 void Measure::range_select(uint8_t range) {
     switch (range)
   {
-    case 2: //1A range
+    case RANGE_1A: //1A range
       digitalWrite(RANGE_1A, HIGH);
       digitalWrite(RANGE_100mA, LOW);
       digitalWrite(RANGE_10mA, LOW);
       digitalWrite(RANGE_1mA, LOW);
+      current_range = RANGE_1A;
     break;
-    case 3: //100mA range
+    case RANGE_100mA: //100mA range
       digitalWrite(RANGE_1A, LOW);
       digitalWrite(RANGE_100mA, HIGH);
       digitalWrite(RANGE_10mA, LOW);
       digitalWrite(RANGE_1mA, LOW);
+      current_range = RANGE_100mA;
       break;
-    case 4: //10mA range
+    case RANGE_10mA: //10mA range
       digitalWrite(RANGE_1A, LOW);
       digitalWrite(RANGE_100mA, LOW);
       digitalWrite(RANGE_10mA, HIGH);
       digitalWrite(RANGE_1mA, LOW);
+      current_range = RANGE_10mA;
     break;
-    case 5: //1mA range
+    case RANGE_1mA: //1mA range
       digitalWrite(RANGE_1A, LOW);
       digitalWrite(RANGE_100mA, LOW);
       digitalWrite(RANGE_10mA, LOW);
       digitalWrite(RANGE_1mA, HIGH);
+      current_range = RANGE_1mA;
     break;
   }
 }
 
-// /**
-//  * @brief Initializes all the inputs and outputs. No Arguments
-//  */
+/**
+ * @brief Ititiates and avareges the readings and calculates the final value.
+ * @returns returns the final mohm value.
+ */
+float Measure::get_resistance()
+{
+    return calculate_mOhms(avg(avg_count), current_range);
+}
+
+/**
+ * @brief Initializes all the inputs and outputs. No Arguments
+ */
 void Measure::pins_init() {
     pinMode(UP, INPUT);
     pinMode(DOWN, INPUT);
